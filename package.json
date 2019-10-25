@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/connectome-neuprint/sunburst/issues"
   },
-  "homepage": "https://github.com/connectome-neuprint/sunburst#readme"
+  "homepage": "https://github.com/connectome-neuprint/sunburst#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "prettier": "^1.18.2"
+  }
 }
