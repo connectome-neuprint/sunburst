@@ -1,0 +1,19 @@
+{
+  "name": "sunburst",
+  "version": "0.0.1",
+  "description": "sunburst plots based on the d3 library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/connectome-neuprint/sunburst.git"
+  },
+  "author": "Jody Clements",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/connectome-neuprint/sunburst/issues"
+  },
+  "homepage": "https://github.com/connectome-neuprint/sunburst#readme"
+}
