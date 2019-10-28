@@ -73,9 +73,11 @@ export default class sunburst {
       .append("g")
       .attr("transform", `translate(${width / 2},${width / 2})`);
 
+    // draw the arcs
     const path = g
       .append("g")
       .selectAll("path")
+      // data supplied is all the descendant nodes apart from the root
       .data(root.descendants().slice(1))
       .join("path")
       .attr("fill", d => {
@@ -93,11 +95,13 @@ export default class sunburst {
       })
       .attr("d", d => arc(d.current));
 
+    // set the on click function
     path
       .filter(d => d.children)
       .style("cursor", "pointer")
       .on("click", clicked);
 
+    // add the title/tooltip to each arc
     path.append("title").text(
       d =>
         `${d
@@ -107,6 +111,7 @@ export default class sunburst {
           .join("/")}\n${format(d.value)}`
     );
 
+    // add the text label to each arc
     const label = g
       .append("g")
       .attr("pointer-events", "none")
@@ -120,6 +125,8 @@ export default class sunburst {
       .attr("transform", d => labelTransform(d.current, radius))
       .text(d => d.data.name);
 
+    // add "parent" circle to the middle of the graphic. This is used to go back
+    // after zooming in to a child arc
     const parent = g
       .append("circle")
       .datum(root)
