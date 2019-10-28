@@ -1,6 +1,7 @@
 import SunBurst from "../src/index";
 
 const sunburst = new SunBurst({
+  displayDepth: 4
   // height: 300,
   // width: 300,
 });

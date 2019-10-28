@@ -2,14 +2,7 @@ import * as d3 from "d3";
 
 const DEFAULT_PRIMARY_COLOR = "#ff0000";
 const DEFAULT_SECONDARY_COLOR = "#0000ff";
-
-function arcVisible(d) {
-  return d.y1 <= 3 && d.y0 >= 1 && d.x1 > d.x0;
-}
-
-function labelVisible(d) {
-  return d.y1 <= 3 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
-}
+const DEFAULT_DISPLAY_DEPTH = 4;
 
 function labelTransform(d, radius) {
   const x = (((d.x0 + d.x1) / 2) * 180) / Math.PI;
@@ -22,6 +15,19 @@ export default class sunburst {
     this.data = props.data || {};
     this.primaryColor = props.primaryColor || DEFAULT_PRIMARY_COLOR;
     this.secondaryColor = props.secondaryColor || DEFAULT_SECONDARY_COLOR;
+    this.displayDepth = props.displayDepth || DEFAULT_DISPLAY_DEPTH;
+  }
+
+  arcVisible(d) {
+    const { displayDepth } = this;
+    return d.y1 <= displayDepth && d.y0 >= 1 && d.x1 > d.x0;
+  }
+
+  labelVisible(d) {
+    const { displayDepth } = this;
+    return (
+      d.y1 <= displayDepth && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03
+    );
   }
 
   setData(dataObject) {
@@ -32,6 +38,7 @@ export default class sunburst {
   render(target) {
     // use d3 to append an svg element to the 'target' container.
     const { data } = this;
+    const self = this;
 
     const partition = inputData => {
       const root = d3
@@ -41,11 +48,22 @@ export default class sunburst {
       return d3.partition().size([2 * Math.PI, root.height + 1])(root);
     };
 
-    const width = 300;
-    const radius = width / 6;
-    const color = d3.scaleOrdinal(
-      d3.quantize(d3.interpolateRainbow, data.children.length + 1)
+    const root = partition(data);
+    root.each(d => {
+      const newD = d;
+      newD.current = d;
+      return newD;
+    });
+
+    const width = target.clientWidth;
+    const radius = width / (this.displayDepth * 2);
+    const colorRange = d3.quantize(
+      d3.interpolateRainbow,
+      data.children.length + 1
     );
+    colorRange.unshift(d3.color("#396a9f"));
+    colorRange.unshift(d3.color("#e2b72f"));
+    const color = d3.scaleOrdinal(colorRange);
     const format = d3.format(",d");
     const arc = d3
       .arc()
@@ -55,13 +73,6 @@ export default class sunburst {
       .padRadius(radius * 1.5)
       .innerRadius(d => d.y0 * radius)
       .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1));
-
-    const root = partition(data);
-    root.each(d => {
-      const newD = d;
-      newD.current = d;
-      return newD;
-    });
 
     const svg = d3
       .select(target)
@@ -88,8 +99,8 @@ export default class sunburst {
         return color(d.data.name);
       })
       .attr("fill-opacity", d => {
-        if (arcVisible(d.current)) {
-          return (d.children ? 0.6 : 0.4)
+        if (self.arcVisible(d.current)) {
+          return d.children ? 0.6 : 0.4;
         }
         return 0;
       })
@@ -121,7 +132,7 @@ export default class sunburst {
       .data(root.descendants().slice(1))
       .join("text")
       .attr("dy", "0.35em")
-      .attr("fill-opacity", d => +labelVisible(d.current))
+      .attr("fill-opacity", d => +self.labelVisible(d.current))
       .attr("transform", d => labelTransform(d.current, radius))
       .text(d => d.data.name);
 
@@ -168,25 +179,28 @@ export default class sunburst {
           const i = d3.interpolate(d.current, d.target);
           return t => (d.current = i(t));
         })
-        .filter(function(d) {
-          return +this.getAttribute("fill-opacity") || arcVisible(d.target);
+        .filter(function pathFilter(d) {
+          return (
+            +this.getAttribute("fill-opacity") || self.arcVisible(d.target)
+          );
         })
         .attr("fill-opacity", d => {
-          if ( arcVisible(d.target)) {
-            return (d.children ? 0.6 : 0.4)
+          if (self.arcVisible(d.target)) {
+            return d.children ? 0.6 : 0.4;
           }
-          return 0
+          return 0;
         })
         .attrTween("d", d => () => arc(d.current));
 
       label
-        .filter(function(d) {
-          return +this.getAttribute("fill-opacity") || labelVisible(d.target);
+        .filter(function labelFilter(d) {
+          return (
+            +this.getAttribute("fill-opacity") || self.labelVisible(d.target)
+          );
         })
         .transition(t)
-        .attr("fill-opacity", d => +labelVisible(d.target))
+        .attr("fill-opacity", d => +self.labelVisible(d.target))
         .attrTween("transform", d => () => labelTransform(d.current, radius));
     }
-
   }
 }
