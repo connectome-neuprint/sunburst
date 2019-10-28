@@ -8,8 +8,35 @@ const sunburst = new SunBurst({
 const target = document.getElementById('sunburst');
 
 const data = {
+  name: "connections",
   children: [
-    'foo', 'bar', 'baz'
+    {
+      name: 'inputs',
+      children: [
+        {
+          name: 'AL',
+          value: 417
+        },
+      ],
+    },
+    {
+      name: 'outputs',
+      children: [
+        {
+          name: 'PBx',
+          children: [
+            {
+              name: 'foo',
+              value: 45
+            },
+            {
+              name: 'bar',
+              value: 123
+            }
+          ]
+        },
+      ],
+    },
   ]
 };
 
