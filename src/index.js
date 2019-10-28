@@ -136,7 +136,10 @@ export default class sunburst {
       .on("click", clicked);
 
     function clicked(p) {
-      parent.datum(p.parent || root);
+      // make sure the mouse cursor changes to a pointer over the inner circle,
+      // when the chart can be zoomed back out to the parent.
+      const cursorStyle = p.parent ? "pointer" : "inherit";
+      parent.datum(p.parent || root).style("cursor", cursorStyle);
 
       root.each(
         d =>
