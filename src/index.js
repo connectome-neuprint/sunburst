@@ -136,7 +136,6 @@ export default class sunburst {
       .attr("r", radius)
       .attr("fill", "none")
       .attr("pointer-events", "all")
-      .on("click", clicked);
 
     // show a label for the root element in the center of the graphic.
     const rootLabel = g.append("text")
@@ -207,6 +206,8 @@ export default class sunburst {
         .text(p.data.name)
 
     }
+
+    parent.on("click", clicked);
 
     // set the on click function
     path
