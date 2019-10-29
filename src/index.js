@@ -138,6 +138,13 @@ export default class sunburst {
       .attr("pointer-events", "all")
       .on("click", clicked);
 
+    // show a label for the root element in the center of the graphic.
+    const rootLabel = g.append("text")
+      .attr("dy", "0.35em")
+      .attr("fill-opacity", 1)
+      .attr("text-anchor", "middle")
+      .text(root.data.name);
+
     function clicked(p) {
       // make sure the mouse cursor changes to a pointer over the inner circle,
       // when the chart can be zoomed back out to the parent.
@@ -193,6 +200,12 @@ export default class sunburst {
         .transition(t)
         .attr("fill-opacity", d => +self.labelVisible(d.target))
         .attrTween("transform", d => () => labelTransform(d.current, radius));
+
+      // transition the root label to show the parents name.
+      rootLabel
+        .transition(t)
+        .text(p.data.name)
+
     }
 
     // set the on click function
