@@ -1,7 +1,5 @@
 import * as d3 from "d3";
 
-const DEFAULT_PRIMARY_COLOR = "#ff0000";
-const DEFAULT_SECONDARY_COLOR = "#0000ff";
 const DEFAULT_DISPLAY_DEPTH = 4;
 
 function labelTransform(d, radius) {
@@ -13,8 +11,7 @@ function labelTransform(d, radius) {
 export default class sunburst {
   constructor(props = {}) {
     this.data = props.data || {};
-    this.primaryColor = props.primaryColor || DEFAULT_PRIMARY_COLOR;
-    this.secondaryColor = props.secondaryColor || DEFAULT_SECONDARY_COLOR;
+    this.colors = props.colors || [];
     this.displayDepth = props.displayDepth || DEFAULT_DISPLAY_DEPTH;
   }
 
@@ -61,8 +58,7 @@ export default class sunburst {
       d3.interpolateRainbow,
       data.children.length + 1
     );
-    colorRange.unshift(d3.color("#396a9f"));
-    colorRange.unshift(d3.color("#e2b72f"));
+    colorRange.unshift(...this.colors.map(color => d3.color(color)));
     const color = d3.scaleOrdinal(colorRange);
     const format = d3.format(",d");
     const arc = d3

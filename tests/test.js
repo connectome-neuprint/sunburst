@@ -1,8 +1,8 @@
 import SunBurst from "../src/index";
 
 const sunburst = new SunBurst({
-  displayDepth: 4
-  // height: 300,
+  displayDepth: 4,
+  colors: ['#396a9f', '#e2b72f']
   // width: 300,
 });
 
