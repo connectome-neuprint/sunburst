@@ -140,6 +140,7 @@ export default class sunburst {
     const rootLabel = g
       .append("text")
       .attr("dy", "0.35em")
+      .attr("pointer-events", "none")
       .attr("fill-opacity", 1)
       .attr("text-anchor", "middle")
       .text(root.data.name);
