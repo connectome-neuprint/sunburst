@@ -151,21 +151,23 @@ export default class sunburst {
       const cursorStyle = p.parent ? "pointer" : "inherit";
       parent.datum(p.parent || root).style("cursor", cursorStyle);
 
-      root.each(
-        d =>
-          (d.target = {
-            x0:
-              Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) *
-              2 *
-              Math.PI,
-            x1:
-              Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) *
-              2 *
-              Math.PI,
-            y0: Math.max(0, d.y0 - p.depth),
-            y1: Math.max(0, d.y1 - p.depth)
-          })
-      );
+      root.each(d => {
+        const updated = d;
+
+        updated.target = {
+          x0:
+            Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) *
+            2 *
+            Math.PI,
+          x1:
+            Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) *
+            2 *
+            Math.PI,
+          y0: Math.max(0, d.y0 - p.depth),
+          y1: Math.max(0, d.y1 - p.depth)
+        };
+        return updated;
+      });
 
       const t = g.transition().duration(750);
 
