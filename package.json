@@ -1,6 +1,6 @@
 {
   "name": "sunburst",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "sunburst plots based on the d3 library",
   "main": "lib/index.js",
   "scripts": {
