@@ -103,7 +103,6 @@ export default class sunburst {
       })
       .attr("d", d => arc(d.current));
 
-
     // add the title/tooltip to each arc
     path.append("title").text(
       d =>
@@ -135,10 +134,11 @@ export default class sunburst {
       .datum(root)
       .attr("r", radius)
       .attr("fill", "none")
-      .attr("pointer-events", "all")
+      .attr("pointer-events", "all");
 
     // show a label for the root element in the center of the graphic.
-    const rootLabel = g.append("text")
+    const rootLabel = g
+      .append("text")
       .attr("dy", "0.35em")
       .attr("fill-opacity", 1)
       .attr("text-anchor", "middle")
@@ -175,7 +175,11 @@ export default class sunburst {
         .transition(t)
         .tween("data", d => {
           const i = d3.interpolate(d.current, d.target);
-          return t => (d.current = i(t));
+          return function tweened(time) {
+            const updated = d;
+            updated.current = i(time);
+            return updated;
+          };
         })
         .filter(function pathFilter(d) {
           return (
@@ -201,10 +205,7 @@ export default class sunburst {
         .attrTween("transform", d => () => labelTransform(d.current, radius));
 
       // transition the root label to show the parents name.
-      rootLabel
-        .transition(t)
-        .text(p.data.name)
-
+      rootLabel.transition(t).text(p.data.name);
     }
 
     parent.on("click", clicked);
