@@ -89,10 +89,11 @@ export default class sunburst {
       .join("path")
       .attr("fill", d => {
         // loop over parents to find oldest ancestor color
-        while (d.depth > 1) {
-          d = d.parent;
+        let node = d;
+        while (node.depth > 1) {
+          node = node.parent;
         }
-        return color(d.data.name);
+        return color(node.data.name);
       })
       .attr("fill-opacity", d => {
         if (self.arcVisible(d.current)) {
@@ -102,11 +103,6 @@ export default class sunburst {
       })
       .attr("d", d => arc(d.current));
 
-    // set the on click function
-    path
-      .filter(d => d.children)
-      .style("cursor", "pointer")
-      .on("click", clicked);
 
     // add the title/tooltip to each arc
     path.append("title").text(
@@ -198,5 +194,11 @@ export default class sunburst {
         .attr("fill-opacity", d => +self.labelVisible(d.target))
         .attrTween("transform", d => () => labelTransform(d.current, radius));
     }
+
+    // set the on click function
+    path
+      .filter(d => d.children)
+      .style("cursor", "pointer")
+      .on("click", clicked);
   }
 }
