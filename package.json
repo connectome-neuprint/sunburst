@@ -1,6 +1,6 @@
 {
   "name": "@neuprint/sunburst",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "sunburst plots based on the d3 library",
   "main": "lib/index.js",
   "scripts": {
