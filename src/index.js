@@ -52,7 +52,7 @@ export default class sunburst {
       return newD;
     });
 
-    const width = target.clientWidth;
+    const width = 700;
     const radius = width / (this.displayDepth * 2);
     const colorRange = d3.quantize(
       d3.interpolateRainbow,
@@ -74,7 +74,9 @@ export default class sunburst {
       .select(target)
       .append("svg")
       .attr("viewBox", [0, 0, width, width])
-      .style("font", "10px sans-serif");
+      .style("font", "10px sans-serif")
+      .style("width", '100%')
+      .style("height", '100%');
 
     const g = svg
       .append("g")
