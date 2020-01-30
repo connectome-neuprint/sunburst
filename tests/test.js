@@ -2,7 +2,8 @@ import SunBurst from "../src/index";
 
 const sunburst = new SunBurst({
   displayDepth: 4,
-  colors: ['#396a9f', '#e2b72f']
+  colors: ['#396a9f', '#e2b72f'],
+  preserveTopLevelOrder: true
   // width: 300,
 });
 

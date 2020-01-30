@@ -12,6 +12,7 @@ export default class sunburst {
   constructor(props = {}) {
     this.data = props.data || {};
     this.colors = props.colors || [];
+    this.preserveTopLevelOrder = props.preserveTopLevelOrder || false;
     this.displayDepth = props.displayDepth || DEFAULT_DISPLAY_DEPTH;
   }
 
@@ -34,14 +35,21 @@ export default class sunburst {
 
   render(target) {
     // use d3 to append an svg element to the 'target' container.
-    const { data } = this;
+    const { data, preserveTopLevelOrder } = this;
     const self = this;
 
     const partition = inputData => {
       const root = d3
         .hierarchy(inputData)
         .sum(d => d.value)
-        .sort((a, b) => b.value - a.value);
+        .sort((a, b) => {
+          // don't sort the top level items, so that they keep a consistent color.
+          // The sorting has to be done outside the application.
+          if (preserveTopLevelOrder && a.depth === 1) {
+            return 0;
+          }
+          return b.value - a.value;
+        });
       return d3.partition().size([2 * Math.PI, root.height + 1])(root);
     };
 
