@@ -20,13 +20,13 @@
   },
   "homepage": "https://github.com/connectome-neuprint/sunburst#readme",
   "peerDependencies": {
-    "d3": "^5.12.0"
+    "d3": "^7.6.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
     "@babel/core": "^7.17.5",
     "@babel/preset-env": "^7.16.11",
-    "d3": "^5.12.0",
+    "d3": "^7.6.1",
     "eslint": "^8.10.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.4.0",
