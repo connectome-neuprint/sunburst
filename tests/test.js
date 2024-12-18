@@ -3,8 +3,9 @@ import SunBurst from "../src/index";
 const sunburst = new SunBurst({
   displayDepth: 4,
   colors: ['#396a9f', '#e2b72f'],
-  preserveTopLevelOrder: true
+  preserveTopLevelOrder: true,
   // width: 300,
+  callback: (node) => { console.log(node.name) }
 });
 
 const target = document.getElementById("sunburst");

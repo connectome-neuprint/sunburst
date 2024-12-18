@@ -14,6 +14,7 @@ export default class sunburst {
     this.colors = props.colors || [];
     this.preserveTopLevelOrder = props.preserveTopLevelOrder || false;
     this.displayDepth = props.displayDepth || DEFAULT_DISPLAY_DEPTH;
+    this.callback = props.callback || null;
   }
 
   arcVisible(d) {
@@ -161,6 +162,14 @@ export default class sunburst {
       const cursorStyle = p.parent ? "pointer" : "inherit";
       parent.datum(p.parent || root).style("cursor", cursorStyle);
 
+      // if there are no children, don't do anything.
+      if (!p.children) {
+        if (self.callback) {
+          self.callback(p.data);
+        }
+        return;
+      }
+
       root.each(d => {
         const updated = d;
 
@@ -225,7 +234,6 @@ export default class sunburst {
 
     // set the on click function
     path
-      .filter(d => d.children)
       .style("cursor", "pointer")
       .on("click", clicked);
   }
